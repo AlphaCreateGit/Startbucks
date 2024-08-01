@@ -1,0 +1,236 @@
+:root {
+  --border-color: #000;
+  --width-image: 500px;
+  --calculate: calc(3 / 2);
+  --transform-from: calc(var(--width-image) * 2);
+}
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Montserrat", sans-serif;
+}
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+input,
+select,
+textarea {
+  background-color: transparent;
+  outline: none;
+}
+button {
+  cursor: pointer;
+  background-color: transparent;
+  outline: none;
+  border: 0;
+}
+body {
+  min-height: 100vh;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1;
+}
+/* css header */
+header {
+  display: grid;
+  grid-template-columns: 80px 1fr calc(var(--width-image) * var(--calculate));
+  grid-template-rows: 80px;
+  position: relative;
+  z-index: 10;
+  border-bottom: 1px solid var(--border-color);
+}
+.header__logo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.header__nav {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: flex-end;
+  align-items: center;
+  border-left: 1px solid var(--border-color);
+}
+.header__nav ul {
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.header__nav ul li a {
+  text-decoration: none;
+  font-weight: 700;
+}
+/* end css header */
+
+/* css carousel */
+.carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+.carousel__list {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.carousel__list::before {
+  content: "";
+  position: absolute;
+  width: var(--width-image);
+  height: 100%;
+  top: 0;
+  left: calc(100% - calc(var(--width-image) * var(--calculate)));
+  z-index: 10;
+  pointer-events: none;
+}
+.carousel__list::after {
+  content: "";
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  background-color: red;
+  width: 400px;
+  height: 300px;
+  z-index: 10;
+  pointer-events: none;
+  border-radius: 20px 50px 110px 230px;
+  filter: blur(150px);
+  opacity: 0.6;
+}
+.carousel__item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+.carousel__item.active,
+.carousel__item.other_1,
+.carousel__item.other_2 {
+  display: block;
+}
+.carousel__item.active {
+  z-index: 2;
+}
+.carousel__item.other_1,
+.carousel__item.other_2 {
+  pointer-events: none;
+}
+.carousel__image {
+  width: var(--width-image);
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 20px;
+  left: calc(100% - calc(var(--width-image) * var(--calculate)));
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: center;
+  font-weight: 500;
+}
+.carousel__image img {
+  width: auto;
+  height: 100%;
+  object-fit: cover;
+  filter: drop-shadow(0 150px 50px #9e0c0c55);
+}
+.carousel__main--content {
+  height: 100%;
+  display: grid;
+  grid-template-columns: calc(
+    100% - calc(var(--width-image) * var(--calculate))
+  );
+}
+.next .carousel__item .carousel__image img {
+  animation: effectNext 0.5s ease-in-out 1 forwards;
+}
+.next .carousel__item.active .carousel__image {
+  --transform-from: var(--width-image);
+}
+.carousel__item.active .carousel__main--content {
+  animation: showContent 1s ease-in-out 1 forwards;
+}
+.next .carousel__item.other_1 .carousel__image {
+  z-index: 3;
+  --transform-from: 0px;
+  overflow: hidden;
+}
+.next .carousel__item.other_2 .carousel__image {
+  z-index: 3;
+  --transform-from: calc(var(--width-image) * 2);
+}
+
+.prev .carousel__item .carousel__image img {
+  animation: effectPrev 0.5s ease-in-out 1 forwards;
+}
+.prev .carousel__item.active .carousel__image {
+  --transform-from: calc(var(--width-image) * -1);
+  overflow: hidden;
+}
+
+.prev .carousel__item.other_1 .carousel__image {
+  --transform-from: 0px;
+  z-index: 3;
+}
+.prev .carousel__item.other_2 .carousel__image {
+  z-index: 3;
+  --transform-from: var(--width-image);
+}
+.carousel__arrows {
+  position: absolute;
+  z-index: 100;
+  left: 0;
+  bottom: 50px;
+}
+.carousel__arrows button {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #000;
+}
+/* end css carousel */
+
+/* effects */
+@keyframes effectNext {
+  from {
+    transform: translateX(calc(var(--transform-from))) rotateY(180deg);
+  }
+  to {
+    transform: translateX(calc(var(--transform-from) - var(--width-image)));
+  }
+}
+@keyframes showContent {
+  from {
+    clip-path: circle(0% at 70% 50%);
+  }
+  to {
+    clip-path: circle(100% at 70% 50%);
+  }
+}
+
+@keyframes effectPrev {
+  from {
+    transform: translateX(calc(var(--transform-from)));
+  }
+  to {
+    transform: translateX(calc(var(--transform-from) + var(--width-image)));
+  }
+}
+/* end effects */
